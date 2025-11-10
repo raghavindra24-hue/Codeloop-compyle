@@ -170,7 +170,7 @@ class ApiService {
       this.delete(`/users/${id}`),
 
     getByRole: (role: string, params?: any) =>
-      this.get(`/users/role/${role}`, params),
+      this.get(`/users/role/${role}`, params ? { params } : undefined),
 
     updateStatus: (id: string, isActive: boolean) =>
       this.patch(`/users/${id}/status`, { isActive }),
