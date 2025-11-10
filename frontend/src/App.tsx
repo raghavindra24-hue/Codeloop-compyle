@@ -82,9 +82,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="admin">
                     <Layout>
-                      <Routes>
-                        <Route path="dashboard" element={<AdminDashboard />} />
-                      </Routes>
+                      <Suspense fallback={<CircularProgress />}>
+                        <Routes>
+                          <Route path="dashboard" element={<AdminDashboard />} />
+                        </Routes>
+                      </Suspense>
                     </Layout>
                   </PrivateRoute>
                 }
@@ -96,9 +98,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="hod">
                     <Layout>
-                      <Routes>
-                        <Route path="dashboard" element={<HodDashboard />} />
-                      </Routes>
+                      <Suspense fallback={<CircularProgress />}>
+                        <Routes>
+                          <Route path="dashboard" element={<HodDashboard />} />
+                        </Routes>
+                      </Suspense>
                     </Layout>
                   </PrivateRoute>
                 }
@@ -110,9 +114,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="teacher">
                     <Layout>
-                      <Routes>
-                        <Route path="dashboard" element={<TeacherDashboard />} />
-                      </Routes>
+                      <Suspense fallback={<CircularProgress />}>
+                        <Routes>
+                          <Route path="dashboard" element={<TeacherDashboard />} />
+                        </Routes>
+                      </Suspense>
                     </Layout>
                   </PrivateRoute>
                 }
@@ -124,9 +130,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="student">
                     <Layout>
-                      <Routes>
-                        <Route path="dashboard" element={<StudentDashboard />} />
-                      </Routes>
+                      <Suspense fallback={<CircularProgress />}>
+                        <Routes>
+                          <Route path="dashboard" element={<StudentDashboard />} />
+                        </Routes>
+                      </Suspense>
                     </Layout>
                   </PrivateRoute>
                 }
@@ -138,8 +146,7 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Layout>
-                      {/* Role-based dashboard component will be shown based on user */}
-                      <div>Dashboard</div>
+                      <DashboardRouter />
                     </Layout>
                   </PrivateRoute>
                 }
