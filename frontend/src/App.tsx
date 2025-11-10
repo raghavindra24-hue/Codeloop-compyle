@@ -82,7 +82,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="admin">
                     <Layout>
-                      <Suspense fallback={<CircularProgress />}>
+                      <Suspense fallback={
+                        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                          <CircularProgress />
+                        </Box>
+                      }>
                         <Routes>
                           <Route path="dashboard" element={<AdminDashboard />} />
                         </Routes>
@@ -98,7 +102,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="hod">
                     <Layout>
-                      <Suspense fallback={<CircularProgress />}>
+                      <Suspense fallback={
+                        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                          <CircularProgress />
+                        </Box>
+                      }>
                         <Routes>
                           <Route path="dashboard" element={<HodDashboard />} />
                         </Routes>
@@ -114,7 +122,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="teacher">
                     <Layout>
-                      <Suspense fallback={<CircularProgress />}>
+                      <Suspense fallback={
+                        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                          <CircularProgress />
+                        </Box>
+                      }>
                         <Routes>
                           <Route path="dashboard" element={<TeacherDashboard />} />
                         </Routes>
@@ -130,7 +142,11 @@ function App() {
                 element={
                   <PrivateRoute requiredRole="student">
                     <Layout>
-                      <Suspense fallback={<CircularProgress />}>
+                      <Suspense fallback={
+                        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                          <CircularProgress />
+                        </Box>
+                      }>
                         <Routes>
                           <Route path="dashboard" element={<StudentDashboard />} />
                         </Routes>
