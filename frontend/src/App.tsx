@@ -15,11 +15,27 @@ import Layout from './components/common/Layout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
-// Dashboard Components (placeholder)
-const AdminDashboard = () => <div>Admin Dashboard</div>;
-const HodDashboard = () => <div>HOD Dashboard</div>;
-const TeacherDashboard = () => <div>Teacher Dashboard</div>;
-const StudentDashboard = () => <div>Student Dashboard</div>;
+// Dashboard Components (placeholders - will be replaced with actual components)
+const AdminDashboard = React.lazy(() => import('./pages/admin/AdminDashboard'));
+const HodDashboard = React.lazy(() => import('./pages/hod/HODDashboard'));
+const TeacherDashboard = React.lazy(() => import('./pages/teacher/TeacherDashboard'));
+const StudentDashboard = React.lazy(() => import('./pages/student/StudentDashboard'));
+
+// Dashboard Router Component for role-based redirection
+const DashboardRouter = () => {
+  const { user } = useAuth();
+
+  if (!user) return <Navigate to="/login" />;
+
+  const roleRoutes = {
+    admin: '/admin/dashboard',
+    hod: '/hod/dashboard',
+    teacher: '/teacher/dashboard',
+    student: '/student/dashboard'
+  };
+
+  return <Navigate to={roleRoutes[user.role]} replace />;
+};
 
 // Create theme
 const theme = createTheme({
