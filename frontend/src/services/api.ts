@@ -338,19 +338,113 @@ class ApiService {
       this.delete(`/assessments/${id}/questions/${questionIndex}`, { data: { type } }),
   };
 
-  // Code execution
+  // Code execution using Piston API
   codeExecution = {
-    execute: (executionData: any) =>
-      this.post('/code-execute', executionData),
+    execute: async (executionData: {
+      language: string;
+      sourceCode: string;
+      stdin?: string;
+      timeout?: number;
+      memoryLimit?: number;
+    }) => {
+      try {
+        // Import pistonService dynamically to avoid circular dependency
+        const { pistonService } = await import('./pistonService');
+        const result = await pistonService.executeCode(
+          executionData.language,
+          executionData.sourceCode,
+          executionData.stdin || '',
+          {
+            timeout: executionData.timeout,
+            memoryLimit: executionData.memoryLimit,
+          }
+        );
 
-    runTests: (questionId: string, code: string) =>
-      this.post(`/code-execute/test/${questionId}`, { source_code: code }),
+        return {
+          success: true,
+          data: pistonService.formatExecutionResult(result),
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        };
+      }
+    },
 
-    getLanguages: () =>
-      this.get('/code-execute/languages'),
+    runTests: async (language: string, sourceCode: string, testCases: Array<{
+      input: string;
+      expectedOutput: string;
+      description?: string;
+    }>) => {
+      try {
+        const { pistonService } = await import('./pistonService');
+        const results = await pistonService.runTestCases(language, sourceCode, testCases);
 
-    healthCheck: () =>
-      this.get('/code-execute/health'),
+        return {
+          success: true,
+          data: {
+            results,
+            totalTests: testCases.length,
+            passedTests: results.filter(r => r.passed).length,
+            failedTests: results.filter(r => !r.passed).length,
+          },
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        };
+      }
+    },
+
+    getLanguages: async () => {
+      try {
+        const { pistonService } = await import('./pistonService');
+        const languages = await pistonService.getSupportedLanguages();
+        return {
+          success: true,
+          data: languages,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        };
+      }
+    },
+
+    healthCheck: async () => {
+      try {
+        const { pistonService } = await import('./pistonService');
+        const isHealthy = await pistonService.healthCheck();
+        return {
+          success: true,
+          data: { status: isHealthy ? 'healthy' : 'unhealthy' },
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        };
+      }
+    },
+
+    isLanguageSupported: async (language: string) => {
+      try {
+        const { pistonService } = await import('./pistonService');
+        const isSupported = pistonService.isLanguageSupported(language);
+        return {
+          success: true,
+          data: { supported: isSupported },
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        };
+      }
+    },
   };
 
   // Analytics
